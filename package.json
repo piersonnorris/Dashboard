@@ -1,0 +1,16 @@
+{
+  "name": "dashboard",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Private personal-finance dashboard. Chunk 1: holdings ingestion and market-update notes.",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "pull": "node scripts/pull-holdings.mjs",
+    "update": "node scripts/market-update.mjs",
+    "update:cached": "node scripts/market-update.mjs --cached --no-pause",
+    "update:dry": "node scripts/market-update.mjs --dry-run",
+    "test": "node --test tests/*.test.mjs"
+  },
+  "license": "MIT"
+}

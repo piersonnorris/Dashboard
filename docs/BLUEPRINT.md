@@ -31,7 +31,7 @@ tags:
 | GitHub document | docs/BLUEPRINT.md |
 | Obsidian mirror | Dashboard/Personal Financial Dashboard Blueprint.md |
 | Source of truth | GitHub is authoritative; update this mirror after approved changes |
-| Current phase | Phase 0: product and architecture definition |
+| Current phase | Phase 1 — chunk 1 shipped 2026-09-24: holdings ingestion, provider seam, market-update notes |
 | Reference reviewed | [SakuStocks public preview](https://app.sakustocks.com/) on 2026-09-24 |
 | Existing related project | Private stock-trackers repo; reuse only reviewed code and synthetic fixtures |
 
@@ -441,6 +441,27 @@ Privacy mode masks balances, quantities, basis, gains, account identifiers, and 
 | 5. Goals and insights | Watchlists, goals, pacing, attention center, explainable summaries | Insights drill to facts; no personalized advice claims |
 | 6. Automation | Scheduled market, FX, actions, snapshots, job controls, optional sandbox aggregator | Replay is harmless; tokens stay private; outages do not corrupt records |
 | 7. Hardening | Accessibility, security, performance, backup drill, monitoring, export/delete, launch plan | No critical issues; E2E passes; restore and rollback are verified |
+
+### Chunk 1 delivered — 2026-09-24
+
+Phase 1 was opened not with the app scaffold but with the two seams every later
+phase rests on, plus a deliverable useful on its own. Shipped:
+
+- `src/lib/holdings/` — reads the private Asset Tracking snapshot, classifies each
+  row (equity / crypto / cash / options / managed) and groups lots into positions.
+  `classify()` is ported verbatim from stock-trackers so the two projects cannot drift.
+- `src/lib/market-data/` — the §11 provider interface, with a Twelve Data adapter
+  implementing `getQuotes` and the rest throwing `NotImplemented`. Rate-limit
+  chunking, per-symbol failure isolation, and the key scrubbed from error messages.
+- `src/lib/notes/` — one Markdown note per holding plus a linked index, written to
+  `out/market-updates/` and the Obsidian vault. Personal text below `## Notes`
+  survives a rebuild; the History table gains one row per day; a symbol with no
+  quote carries a visible warning rather than a stale number.
+- A deny-by-default `.gitignore` (the repo had none), and 42 tests on synthetic
+  fixtures.
+
+Decisions in `docs/decisions/0001-chunk-1-holdings-and-market-notes.md`. Not built,
+by design: cost basis, performance, news narrative, scaffold, database, auth.
 
 ## 14. Testing and operations
 

@@ -1,0 +1,31 @@
+# Deny-by-default, same pattern as the website repo.
+#
+# This working tree holds real share counts, real dollar values and a
+# market-data API key. Nothing is tracked unless it is named below, so a
+# new private file cannot be swallowed into a commit by accident.
+#
+# NEVER allowlist: private/, out/, .env*, node_modules/
+# Adding a new source file means adding its ! entry here (parent dirs too).
+
+*
+
+!/.gitignore
+!/LICENSE
+!/README.md
+!/package.json
+!/docs/
+!/docs/**
+!/src/
+!/src/**
+!/scripts/
+!/scripts/**
+!/tests/
+!/tests/**
+
+# Re-deny, even if a pattern above would otherwise reach them.
+/private/
+/out/
+/node_modules/
+.env
+.env.*
+*.log
