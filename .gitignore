@@ -13,6 +13,13 @@
 !/LICENSE
 !/README.md
 !/package.json
+!/app/
+!/app/index.html
+!/app/app.js
+!/app/styles.css
+!/app/demo-data.js
+!/app/privacy.js
+!/app/formatters.js
 !/docs/
 !/docs/**
 !/src/

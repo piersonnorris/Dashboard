@@ -3,9 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Private personal-finance dashboard. Chunk 1: holdings ingestion and market-update notes.",
+  "description": "Private personal-finance dashboard with a local demo UI, holdings ingestion, and market-update notes.",
   "engines": { "node": ">=20" },
   "scripts": {
+    "dev": "node scripts/serve-dashboard.mjs",
+    "start": "node scripts/serve-dashboard.mjs",
     "pull": "node scripts/pull-holdings.mjs",
     "update": "node scripts/market-update.mjs",
     "update:cached": "node scripts/market-update.mjs --cached --no-pause",

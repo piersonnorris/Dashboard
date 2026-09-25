@@ -4,7 +4,25 @@ A private personal-finance and investment dashboard. The full product definition
 is in [`docs/BLUEPRINT.md`](docs/BLUEPRINT.md); this README covers what is
 actually built.
 
-## What exists today (chunk 1)
+## What exists today
+
+### Local dashboard prototype
+
+An original, responsive personal-finance dashboard shell now runs entirely on
+fictional data. It includes overview, portfolio, accounts, activity, goals, and
+watchlist views; chart ranges; filtering; keyboard navigation; and a privacy
+control that masks monetary amounts. The visible demo disclosure is deliberate:
+the browser UI does not read `private/`, generated notes, or real balances.
+
+```bash
+npm run dev             # open http://127.0.0.1:4175
+```
+
+The fixture contract and its limits are documented in
+[`docs/DATA-CONTRACT.md`](docs/DATA-CONTRACT.md). Add/import buttons are honest
+prototype affordances; they do not persist data yet.
+
+### Holdings and market notes (chunk 1)
 
 Holdings ingestion, a market-data provider seam, and a generator that writes one
 Markdown note per holding plus an index, for reading in Obsidian.
@@ -59,7 +77,7 @@ npm run pull            # refresh private/STOCK_HANDOFF.md from stock-trackers
 npm run update          # fetch quotes, write notes to out/ and the vault
 npm run update:dry      # write out/ only, leave the vault alone
 npm run update:cached   # reuse the quote cache — for iterating on formatting
-npm test                # 51 tests, synthetic fixtures only
+    npm test                # 67 tests, synthetic fixtures only
 ```
 
 `scripts/market-update.mjs` also takes `--symbol VST` to build one note.

@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="dark">
+    <meta name="theme-color" content="#0d1020">
+    <meta name="description" content="A private personal-finance dashboard prototype using fictional demo data.">
+    <title>Dashboard — Financial command center</title>
+    <link rel="stylesheet" href="/styles.css?v=20260925-2">
+    <script type="module" src="/app.js?v=20260925-2"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to dashboard</a>
+
+    <div class="app-shell" data-nav-open="false">
+      <aside class="sidebar" id="primary-sidebar" aria-label="Primary navigation">
+        <div class="brand-row">
+          <a class="brand" href="#overview" aria-label="Dashboard overview">
+            <span class="brand-mark" aria-hidden="true">
+              <svg viewBox="0 0 32 32"><path d="M7 22.5 13.2 16l4.4 4.2L25 10.5"/><path d="M20 10.5h5v5"/></svg>
+            </span>
+            <span>
+              <strong>Dashboard</strong>
+              <small>Personal finance</small>
+            </span>
+          </a>
+          <button class="icon-button mobile-close" type="button" data-action="close-nav" aria-label="Close navigation">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+          </button>
+        </div>
+
+        <div class="demo-chip"><span aria-hidden="true"></span> Fictional demo</div>
+
+        <nav class="nav-list" aria-label="Dashboard sections">
+          <p class="nav-label">Workspace</p>
+          <button class="nav-item is-active" type="button" data-view="overview" aria-current="page">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="4" rx="2"/><rect x="14" y="11" width="7" height="10" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/></svg>
+            Overview
+          </button>
+          <button class="nav-item" type="button" data-view="portfolio">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 18V9m5 9V5m6 13v-7m5 7V3"/><path d="M3 21h18"/></svg>
+            Portfolio
+          </button>
+          <button class="nav-item" type="button" data-view="accounts">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 8.5h18M5 5h14a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z"/><path d="M16 14h2"/></svg>
+            Accounts
+          </button>
+          <button class="nav-item" type="button" data-view="activity">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/><circle cx="18" cy="17" r="2"/></svg>
+            Activity
+          </button>
+          <button class="nav-item" type="button" data-view="goals">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="m15 9 5-5"/></svg>
+            Goals
+          </button>
+
+          <p class="nav-label nav-label--secondary">Research</p>
+          <button class="nav-item" type="button" data-view="watchlist">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.7 14.5 9l5.8.8-4.2 4.1 1 5.8-5.1-2.8-5.1 2.8 1-5.8-4.2-4.1L9.5 9 12 3.7Z"/></svg>
+            Watchlist
+          </button>
+        </nav>
+
+        <div class="sidebar-footer">
+          <button class="nav-item" type="button" data-action="show-settings">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.2h-4V21a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1L4.2 17l.1-.1a1.7 1.7 0 0 0 .3-1.9A1.7 1.7 0 0 0 3 14H2.8v-4H3a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L4.2 7 7 4.2l.1.1A1.7 1.7 0 0 0 9 4.6 1.7 1.7 0 0 0 10 3v-.2h4V3a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1L19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.2v4H21a1.7 1.7 0 0 0-1.6 1Z"/></svg>
+            Settings
+          </button>
+          <div class="profile-card">
+            <span class="avatar" aria-hidden="true">PN</span>
+            <span><strong>Private workspace</strong><small>Local prototype</small></span>
+            <span class="online-dot" title="Local preview" aria-label="Local preview active"></span>
+          </div>
+        </div>
+      </aside>
+
+      <button class="nav-scrim" type="button" data-action="close-nav" aria-label="Close navigation"></button>
+
+      <main id="main-content" class="main-content" tabindex="-1">
+        <header class="topbar">
+          <div class="topbar-title">
+            <button class="icon-button mobile-menu" type="button" data-action="open-nav" aria-label="Open navigation" aria-controls="primary-sidebar" aria-expanded="false">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+            </button>
+            <div>
+              <p>Financial command center</p>
+              <h1 id="page-title">Overview</h1>
+            </div>
+          </div>
+          <div class="topbar-actions">
+            <button class="search-button" type="button" data-action="search" aria-haspopup="dialog">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m16 16 4 4"/></svg>
+              <span>Search dashboard</span>
+              <kbd>Ctrl K</kbd>
+            </button>
+            <div class="freshness" title="Demo snapshot freshness">
+              <span aria-hidden="true"></span>
+              <small>Demo snapshot</small>
+              <strong id="freshness-time">Sep 24</strong>
+            </div>
+            <button class="privacy-button" type="button" data-action="toggle-privacy" aria-pressed="false" title="Hide financial amounts">
+              <svg class="eye-open" viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"/><circle cx="12" cy="12" r="2.5"/></svg>
+              <svg class="eye-closed" viewBox="0 0 24 24" aria-hidden="true"><path d="m3 3 18 18M10.6 6.1A10.3 10.3 0 0 1 12 6c6 0 9.5 6 9.5 6a14 14 0 0 1-2.2 2.8M6.2 6.2C3.8 7.8 2.5 12 2.5 12s3.5 6 9.5 6a9 9 0 0 0 3.2-.6M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>
+              <span>Privacy</span>
+            </button>
+          </div>
+        </header>
+
+        <section class="content-wrap">
+          <div class="data-disclosure" role="note">
+            <span class="disclosure-icon" aria-hidden="true">D</span>
+            <p><strong>Demo workspace</strong><span id="demo-disclosure">All amounts, accounts, activity, and trends on this screen are fictional.</span></p>
+            <button type="button" data-action="about-demo">Why demo data?</button>
+          </div>
+
+          <section class="view-panel is-active" data-view-panel="overview" aria-labelledby="overview-heading">
+            <div class="section-heading">
+              <div><p class="eyebrow">Your financial picture</p><h2 id="overview-heading" tabindex="-1">Good afternoon, Pierson.</h2></div>
+              <button class="secondary-button" type="button" data-view-jump="accounts">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+                Add account
+              </button>
+            </div>
+
+            <div class="overview-grid">
+              <article class="card net-worth-card">
+                <div class="card-heading net-worth-heading">
+                  <div>
+                    <p class="card-label">Total net worth</p>
+                    <div class="hero-amount sensitive" id="net-worth-value">$0</div>
+                    <p class="change-line positive" id="net-worth-change"><span>↗</span> — <small>for this period</small></p>
+                  </div>
+                  <div class="segmented-control" id="range-control" aria-label="Net worth chart range">
+                    <button type="button" data-range="1M" aria-pressed="false">1M</button>
+                    <button type="button" data-range="3M" aria-pressed="false">3M</button>
+                    <button type="button" data-range="6M" aria-pressed="false">6M</button>
+                    <button class="is-active" type="button" data-range="1Y" aria-pressed="true">1Y</button>
+                  </div>
+                </div>
+                <div class="chart-wrap">
+                  <svg id="net-worth-chart" viewBox="0 0 760 265" role="img" aria-labelledby="chart-title chart-description">
+                    <title id="chart-title">Net worth over time</title>
+                    <desc id="chart-description">Fictional net-worth trend for the selected period.</desc>
+                  </svg>
+                  <div class="chart-tooltip" id="chart-tooltip" role="status" aria-live="polite" hidden></div>
+                </div>
+                <div class="chart-axis" id="chart-axis" aria-hidden="true"></div>
+              </article>
+
+              <article class="card health-card">
+                <div class="card-heading">
+                  <div><p class="card-label">Financial pulse</p><h3>Healthy foundation</h3></div>
+                  <span class="status-pill">On track</span>
+                </div>
+                <div class="health-score-row">
+                  <div class="score-ring" id="health-ring" role="img" aria-label="Financial health score">
+                    <span><strong id="health-score">0</strong><small>/ 100</small></span>
+                  </div>
+                  <p>Built from savings pace, liquidity, debt load, and diversification.</p>
+                </div>
+                <dl class="health-metrics">
+                  <div><dt>Savings rate</dt><dd id="savings-rate">—</dd></div>
+                  <div><dt>Cash runway</dt><dd id="liquidity-months">—</dd></div>
+                  <div><dt>Debt load</dt><dd id="debt-load">—</dd></div>
+                </dl>
+                <button class="text-button" type="button" data-view-jump="goals">See your goals <span aria-hidden="true">→</span></button>
+              </article>
+            </div>
+
+            <div class="metric-grid" id="metric-grid" aria-label="Financial summary"></div>
+
+            <div class="detail-grid">
+              <article class="card allocation-card">
+                <div class="card-heading"><div><p class="card-label">Asset allocation</p><h3>Where your money lives</h3></div><button class="menu-button" type="button" aria-label="Allocation options" data-action="prototype-only">•••</button></div>
+                <div class="allocation-layout">
+                  <div class="donut" id="allocation-donut" role="img" aria-label="Fictional asset allocation"><span><strong class="sensitive" id="invested-total">$0</strong><small>invested assets</small></span></div>
+                  <div class="allocation-legend" id="allocation-legend"></div>
+                </div>
+              </article>
+
+              <article class="card cashflow-card">
+                <div class="card-heading"><div><p class="card-label">Monthly cash flow</p><h3>September snapshot</h3></div><span class="status-pill status-pill--neutral">Demo month</span></div>
+                <div class="cashflow-net"><span>Net cash flow</span><strong class="sensitive" id="cashflow-net">$0</strong></div>
+                <div class="cashflow-bars" id="cashflow-bars"></div>
+                <p class="card-footnote">Transfers are excluded from income and spending.</p>
+              </article>
+            </div>
+
+            <div class="lower-grid">
+              <article class="card holdings-card">
+                <div class="card-heading"><div><p class="card-label">Portfolio</p><h3>Your holdings</h3></div><button class="text-button" type="button" data-view-jump="portfolio">View all <span aria-hidden="true">→</span></button></div>
+                <div class="table-wrap"><table><thead><tr><th scope="col">Asset</th><th scope="col">Trend</th><th scope="col">Today</th><th scope="col">Value</th></tr></thead><tbody id="overview-holdings"></tbody></table></div>
+              </article>
+
+              <div class="side-stack">
+                <article class="card attention-card">
+                  <div class="card-heading"><div><p class="card-label">Attention</p><h3>Worth a look</h3></div><span class="count-badge" id="attention-count">0</span></div>
+                  <div class="attention-list" id="attention-list"></div>
+                </article>
+                <article class="card goals-card">
+                  <div class="card-heading"><div><p class="card-label">Goals</p><h3>Next milestone</h3></div><button class="text-button" type="button" data-view-jump="goals">All goals</button></div>
+                  <div id="featured-goal"></div>
+                </article>
+              </div>
+            </div>
+          </section>
+
+          <section class="view-panel" data-view-panel="portfolio" aria-labelledby="portfolio-heading" hidden>
+            <div class="section-heading"><div><p class="eyebrow">Investments</p><h2 id="portfolio-heading" tabindex="-1">Portfolio</h2><p>Understand allocation and position-level movement without implying investment advice.</p></div><span class="status-pill">Synthetic positions</span></div>
+            <div class="portfolio-summary" id="portfolio-summary"></div>
+            <article class="card table-card"><div class="card-heading"><div><p class="card-label">All positions</p><h3>Holdings breakdown</h3></div><label class="table-search"><span class="sr-only">Filter holdings</span><input id="holding-filter" type="search" placeholder="Filter holdings"></label></div><div class="table-wrap"><table><thead><tr><th scope="col">Asset</th><th scope="col">Account</th><th scope="col">Shares</th><th scope="col">Price</th><th scope="col">Weight</th><th scope="col">Today</th><th scope="col">Value</th></tr></thead><tbody id="portfolio-table"></tbody></table></div></article>
+          </section>
+
+          <section class="view-panel" data-view-panel="accounts" aria-labelledby="accounts-heading" hidden>
+            <div class="section-heading"><div><p class="eyebrow">Balance sheet</p><h2 id="accounts-heading" tabindex="-1">Accounts</h2><p>One view across assets and liabilities. Connections are not enabled in this prototype.</p></div><button class="primary-button" type="button" data-action="prototype-only">Add account</button></div>
+            <div class="account-grid" id="account-grid"></div>
+            <article class="empty-state"><span aria-hidden="true">↗</span><div><h3>Live connections come later</h3><p>The first safe milestone is manual and CSV input. Provider credentials will remain server-side when integrations are added.</p></div><button type="button" class="secondary-button" data-action="about-demo">Read the data boundary</button></article>
+          </section>
+
+          <section class="view-panel" data-view-panel="activity" aria-labelledby="activity-heading" hidden>
+            <div class="section-heading"><div><p class="eyebrow">Cash movement</p><h2 id="activity-heading" tabindex="-1">Activity</h2><p>A reviewable ledger view. Every row below is fictional.</p></div><button class="primary-button" type="button" data-action="prototype-only">Import CSV</button></div>
+            <article class="card table-card"><div class="card-heading"><div><p class="card-label">Recent activity</p><h3>Latest transactions</h3></div><span class="status-pill status-pill--neutral">Demo ledger</span></div><div class="activity-list" id="activity-list"></div></article>
+          </section>
+
+          <section class="view-panel" data-view-panel="goals" aria-labelledby="goals-heading" hidden>
+            <div class="section-heading"><div><p class="eyebrow">Planning</p><h2 id="goals-heading" tabindex="-1">Goals</h2><p>Track progress without turning projections into promises.</p></div><button class="primary-button" type="button" data-action="prototype-only">New goal</button></div>
+            <div class="goal-grid" id="goal-grid"></div>
+          </section>
+
+          <section class="view-panel" data-view-panel="watchlist" aria-labelledby="watchlist-heading" hidden>
+            <div class="section-heading"><div><p class="eyebrow">Research list</p><h2 id="watchlist-heading" tabindex="-1">Watchlist</h2><p>Synthetic prices for interface testing only — not quotes or recommendations.</p></div><button class="primary-button" type="button" data-action="prototype-only">Add symbol</button></div>
+            <div class="watch-grid" id="watch-grid"></div>
+          </section>
+        </section>
+      </main>
+    </div>
+
+    <dialog class="command-dialog" id="command-dialog" aria-labelledby="command-title">
+      <form method="dialog">
+        <div class="command-input-wrap"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m16 16 4 4"/></svg><label class="sr-only" for="command-input">Search dashboard</label><input id="command-input" autocomplete="off" placeholder="Go to a dashboard section…"><button value="cancel" aria-label="Close search">Esc</button></div>
+        <h2 id="command-title">Quick navigation</h2>
+        <div id="command-results" class="command-results"></div>
+      </form>
+    </dialog>
+
+    <dialog class="info-dialog" id="info-dialog" aria-labelledby="info-title">
+      <form method="dialog">
+        <button class="dialog-close" value="cancel" aria-label="Close">×</button>
+        <span class="dialog-icon" aria-hidden="true">D</span>
+        <h2 id="info-title">This build uses fictional data</h2>
+        <p>The prototype proves layout, interaction, privacy masking, and responsive behavior without reading your balances or committing sensitive files.</p>
+        <p>Your existing holdings ingestion stays outside this browser bundle. A later milestone will expose a redacted, local API instead of shipping private files to the client.</p>
+        <button class="primary-button" value="default">Got it</button>
+      </form>
+    </dialog>
+
+    <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+  </body>
+</html>
