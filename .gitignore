@@ -20,6 +20,7 @@
 !/app/demo-data.js
 !/app/privacy.js
 !/app/formatters.js
+!/app/palette.js
 !/docs/
 !/docs/**
 !/src/

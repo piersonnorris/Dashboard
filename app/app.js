@@ -108,6 +108,12 @@ import {
     }
   }
 
+  /* Direction of a move. Zero is flat, not up: a 0.00% badge painted in the
+     bullish color would claim a gain that did not happen. */
+  function tone(change) {
+    return change < 0 ? 'negative' : change > 0 ? 'positive' : 'neutral';
+  }
+
   function sparkline(values, change, label = 'Recent trend') {
     const width = 96;
     const height = 34;
@@ -119,8 +125,8 @@ import {
       const y = height - 3 - ((value - min) / spread) * (height - 6);
       return `${x.toFixed(1)},${y.toFixed(1)}`;
     }).join(' ');
-    const tone = change < 0 ? 'negative' : change > 0 ? 'positive' : 'neutral';
-    return `<svg class="sparkline" data-tone="${tone}" viewBox="0 0 ${width} ${height}" role="img" aria-label="${escapeHtml(label)}"><polyline points="${points}"/></svg>`;
+    const lineTone = tone(change);
+    return `<svg class="sparkline" data-tone="${lineTone}" viewBox="0 0 ${width} ${height}" role="img" aria-label="${escapeHtml(label)}"><polyline points="${points}"/></svg>`;
   }
 
   function assetMark(symbol) {
@@ -168,11 +174,13 @@ import {
         <circle class="chart-dot" cx="${x(index)}" cy="${y(row.value)}" r="4"/>
       </g>`).join('');
 
-    const chartNarrative = `Fictional net worth increased from ${currency.format(rows[0].value)} to ${currency.format(rows.at(-1).value)}.`;
+    const rising = rows.at(-1).value >= rows[0].value;
+    svg.dataset.trend = rising ? 'up' : 'down';
+    const chartNarrative = `Fictional net worth ${rising ? 'increased' : 'decreased'} from ${currency.format(rows[0].value)} to ${currency.format(rows.at(-1).value)}.`;
     svg.innerHTML = `
       <title id="chart-title">Net worth over ${range}</title>
       <desc id="chart-description">${redactCurrencyText(chartNarrative, state.privacy)}</desc>
-      <defs><linearGradient id="area-fill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ff786d" stop-opacity=".33"/><stop offset="100%" stop-color="#ff786d" stop-opacity="0"/></linearGradient><linearGradient id="line-stroke" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#ff8a75"/><stop offset="1" stop-color="#a990ff"/></linearGradient></defs>
+      <defs><linearGradient id="area-fill" x1="0" y1="0" x2="0" y2="1"><stop class="chart-fill-top" offset="0%"/><stop class="chart-fill-bottom" offset="100%"/></linearGradient></defs>
       ${grid}
       <path class="chart-area" d="${area}"/>
       <polyline class="chart-line" points="${points}"/>
@@ -183,8 +191,8 @@ import {
     const percent = ((last - first) / first) * 100;
     setSensitiveText(document.getElementById('net-worth-value'), currency.format(last));
     const changeElement = document.getElementById('net-worth-change');
-    changeElement.classList.toggle('negative', percent < 0);
-    changeElement.classList.toggle('positive', percent >= 0);
+    changeElement.classList.remove('negative', 'positive', 'neutral');
+    changeElement.classList.add(tone(percent));
     changeElement.innerHTML = `<span aria-hidden="true">${percent >= 0 ? '↗' : '↘'}</span> ${signedPercent(percent)} <small>for ${range}</small>`;
 
     const axis = document.getElementById('chart-axis');
@@ -265,11 +273,10 @@ import {
   }
 
   function holdingRow(holding, compact = false) {
-    const negative = holding.dayChange < 0;
     if (compact) {
-      return `<tr><td><div class="asset-cell">${assetMark(holding.symbol)}<span><strong>${escapeHtml(holding.symbol)}</strong><small>${escapeHtml(holding.name)}</small></span></div></td><td>${sparkline(holding.sparkline, holding.dayChange, `${holding.symbol} seven-point demo trend`)}</td><td><span class="change-badge ${negative ? 'negative' : 'positive'}">${signedPercent(holding.dayChange)}</span></td><td class="numeric">${sensitive(currency.format(holding.value))}</td></tr>`;
+      return `<tr><td><div class="asset-cell">${assetMark(holding.symbol)}<span><strong>${escapeHtml(holding.symbol)}</strong><small>${escapeHtml(holding.name)}</small></span></div></td><td>${sparkline(holding.sparkline, holding.dayChange, `${holding.symbol} seven-point demo trend`)}</td><td><span class="change-badge ${tone(holding.dayChange)}">${signedPercent(holding.dayChange)}</span></td><td class="numeric">${sensitive(currency.format(holding.value))}</td></tr>`;
     }
-    return `<tr><td><div class="asset-cell">${assetMark(holding.symbol)}<span><strong>${escapeHtml(holding.symbol)}</strong><small>${escapeHtml(holding.name)}</small></span></div></td><td>${escapeHtml(holding.account)}</td><td class="numeric">${sensitive(number.format(holding.shares))}</td><td class="numeric">${sensitive(preciseCurrency.format(holding.price))}</td><td class="numeric">${holding.portfolioWeight.toFixed(1)}%</td><td><span class="change-badge ${negative ? 'negative' : 'positive'}">${signedPercent(holding.dayChange)}</span></td><td class="numeric">${sensitive(currency.format(holding.value))}</td></tr>`;
+    return `<tr><td><div class="asset-cell">${assetMark(holding.symbol)}<span><strong>${escapeHtml(holding.symbol)}</strong><small>${escapeHtml(holding.name)}</small></span></div></td><td>${escapeHtml(holding.account)}</td><td class="numeric">${sensitive(number.format(holding.shares))}</td><td class="numeric">${sensitive(preciseCurrency.format(holding.price))}</td><td class="numeric">${holding.portfolioWeight.toFixed(1)}%</td><td><span class="change-badge ${tone(holding.dayChange)}">${signedPercent(holding.dayChange)}</span></td><td class="numeric">${sensitive(currency.format(holding.value))}</td></tr>`;
   }
 
   function renderHoldings() {
@@ -330,8 +337,7 @@ import {
 
   function renderWatchlist() {
     document.getElementById('watch-grid').innerHTML = data.watchlist.map((item) => {
-      const negative = item.dayChange < 0;
-      return `<article class="card watch-card"><div class="watch-card-top">${assetMark(item.symbol)}<span class="change-badge ${negative ? 'negative' : 'positive'}">${signedPercent(item.dayChange)}</span></div><div><p>${escapeHtml(item.name)}</p><h3>${escapeHtml(item.symbol)}</h3></div><strong class="watch-price">${sensitive(preciseCurrency.format(item.price))}</strong>${sparkline(item.sparkline, item.dayChange, `${item.symbol} fictional seven-point trend`)}<p class="watch-note">${escapeHtml(item.note)}</p><button type="button" class="text-button" data-action="prototype-only">Open research <span aria-hidden="true">→</span></button></article>`;
+      return `<article class="card watch-card"><div class="watch-card-top">${assetMark(item.symbol)}<span class="change-badge ${tone(item.dayChange)}">${signedPercent(item.dayChange)}</span></div><div><p>${escapeHtml(item.name)}</p><h3>${escapeHtml(item.symbol)}</h3></div><strong class="watch-price">${sensitive(preciseCurrency.format(item.price))}</strong>${sparkline(item.sparkline, item.dayChange, `${item.symbol} fictional seven-point trend`)}<p class="watch-note">${escapeHtml(item.note)}</p><button type="button" class="text-button" data-action="prototype-only">Open research <span aria-hidden="true">→</span></button></article>`;
     }).join('');
   }
 
@@ -406,7 +412,56 @@ import {
     announce.timer = setTimeout(() => { toast.hidden = true; }, 2800);
   }
 
+  /* ---------------------------------------------------- market colors */
+
+  const palette = window.DashboardPalette;
+
+  function swatch(color) {
+    return `<span class="swatch" style="--swatch:${color.hex}" aria-hidden="true"></span>`;
+  }
+
+  /* A tiny stand-in for the real thing: two candles and a badge each way,
+     drawn in the palette's own colors, so the choice is made by looking. */
+  function palettePreview(p) {
+    return `<span class="palette-preview" aria-hidden="true" style="--p-bull:${p.bull.hex};--p-bear:${p.bear.hex}">
+      <svg viewBox="0 0 120 44"><polyline class="pv-line" points="2,34 18,30 32,33 48,22 62,25 78,14 94,17 118,6"/>
+      <g class="pv-up"><line x1="100" y1="10" x2="100" y2="38"/><rect x="95" y="16" width="10" height="16" rx="1.5"/></g>
+      <g class="pv-down"><line x1="112" y1="8" x2="112" y2="36"/><rect x="107" y="12" width="10" height="18" rx="1.5"/></g></svg>
+      <span class="pv-badges"><b class="pv-badge pv-badge--up">+2.41%</b><b class="pv-badge pv-badge--down">−1.18%</b></span>
+    </span>`;
+  }
+
+  function renderPaletteOptions() {
+    const current = palette.load();
+    document.getElementById('palette-options').innerHTML = palette.PALETTES.map((p) => `
+      <label class="palette-option">
+        <input type="radio" name="market-palette" value="${p.id}" ${p.id === current ? 'checked' : ''}>
+        <span class="palette-card">
+          <span class="palette-head">
+            <strong>${escapeHtml(p.name)}</strong>
+            <span class="palette-pair">${swatch(p.bull)}<small>${escapeHtml(p.bull.label)} up</small>${swatch(p.bear)}<small>${escapeHtml(p.bear.label)} down</small></span>
+          </span>
+          ${palettePreview(p)}
+          <span class="palette-note">${escapeHtml(p.note)}</span>
+        </span>
+      </label>`).join('');
+  }
+
+  function openSettings() {
+    renderPaletteOptions();
+    const dialog = document.getElementById('settings-dialog');
+    dialog.showModal();
+    dialog.querySelector('input[name="market-palette"]:checked')?.focus();
+  }
+
   function bindEvents() {
+    document.getElementById('palette-options').addEventListener('change', (event) => {
+      if (event.target.name !== 'market-palette') return;
+      const chosen = palette.apply(event.target.value);
+      const saved = palette.save(chosen.id);
+      announce(`Market colors: ${chosen.bull.label.toLowerCase()} up, ${chosen.bear.label.toLowerCase()} down${saved ? '' : ' (this browser will not remember it)'}.`);
+    });
+
     document.addEventListener('click', (event) => {
       const viewButton = event.target.closest('[data-view]');
       if (viewButton) return changeView(viewButton.dataset.view);
@@ -432,7 +487,7 @@ import {
       } else if (action === 'about-demo') {
         document.getElementById('info-dialog').showModal();
       } else if (action === 'show-settings') {
-        announce('Settings are planned for the authenticated application milestone.');
+        openSettings();
       } else if (action === 'prototype-only') {
         announce('This action is intentionally disabled in the data-safe prototype.');
       } else if (action === 'attention') {

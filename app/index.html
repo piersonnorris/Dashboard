@@ -7,8 +7,14 @@
     <meta name="theme-color" content="#0d1020">
     <meta name="description" content="A private personal-finance dashboard prototype using fictional demo data.">
     <title>Dashboard — Financial command center</title>
-    <link rel="stylesheet" href="/styles.css?v=20260925-2">
-    <script type="module" src="/app.js?v=20260925-2"></script>
+    <!-- the sidebar brand mark, inline: the CSP allows data: images, and no
+         favicon meant a 404 on every load -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27><rect width=%2732%27 height=%2732%27 rx=%278%27 fill=%27%231a1e2d%27/><path d=%27M7 22.5 13.2 16l4.4 4.2L25 10.5M20 10.5h5v5%27 fill=%27none%27 stroke=%27%23ff786d%27 stroke-width=%272.6%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/></svg>">
+    <!-- palette.js first and blocking: the saved market colors land on <html>
+         before the stylesheet paints, so the page never flashes the default. -->
+    <script src="/palette.js?v=20261002-1"></script>
+    <link rel="stylesheet" href="/styles.css?v=20261002-1">
+    <script type="module" src="/app.js?v=20261002-1"></script>
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to dashboard</a>
@@ -252,6 +258,21 @@
         <p>The prototype proves layout, interaction, privacy masking, and responsive behavior without reading your balances or committing sensitive files.</p>
         <p>Your existing holdings ingestion stays outside this browser bundle. A later milestone will expose a redacted, local API instead of shipping private files to the client.</p>
         <button class="primary-button" value="default">Got it</button>
+      </form>
+    </dialog>
+
+    <dialog class="info-dialog settings-dialog" id="settings-dialog" aria-labelledby="settings-title">
+      <form method="dialog">
+        <button class="dialog-close" value="cancel" aria-label="Close settings">×</button>
+        <p class="settings-eyebrow">Settings</p>
+        <h2 id="settings-title">Market colors</h2>
+        <p class="settings-lede">Choose which color means up and which means down. It changes every price move, sparkline and gain or loss on the dashboard, and this browser remembers it.</p>
+        <fieldset class="palette-options">
+          <legend class="visually-hidden">Bullish and bearish colors</legend>
+          <div id="palette-options"></div>
+        </fieldset>
+        <p class="settings-note">Status colors like “On track” stay green whichever you pick, and every move keeps its + or − sign, so direction never depends on color alone.</p>
+        <button class="primary-button" value="default">Done</button>
       </form>
     </dialog>
 
